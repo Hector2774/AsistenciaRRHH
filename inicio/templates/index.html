@@ -1,0 +1,20 @@
+
+{% extends "archivo.html" %}
+
+{%block content%}
+<H1>MI SEGUNDA PAGINA CON DJANGO</H1>
+<H1>EL PRINCIPIO DEL FIN</H1>
+
+{% for elemento in salida %}
+<h1>{{ elemento }}</h1>
+{% endfor %}
+
+<ul>
+  {% for clave, valor in datos.items %}
+    <li>{{ clave }}: {{ valor }}</li> 
+  {% endfor %}
+</ul>
+{% endblock %}
+
+   
+

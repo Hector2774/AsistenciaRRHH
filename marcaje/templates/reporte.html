@@ -1,0 +1,46 @@
+
+{% load static %}<!-- Reusa estilos del admin -->
+
+{% block content %}
+<link rel="stylesheet" href="{% static '/styles/main.css' %}">
+<div class="global-container">
+    <h1>Asistencia de Empleados PROMACO</h1>
+    <div class="table-container">
+        <table class="tabla-asis">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Sucursal</th>
+                    <th>Código Empleado</th>
+                    <th>Empleado</th>
+                    <th>Horario</th>
+                    <th>Marca Entrada</th>
+                    <th>Marca Salida</th>
+                    <th>Simbolo</th>
+                    <th>Falta</th>
+                    <th>Departamento</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{ registro.fecha }}</td>
+                    <td>{{ registro.empleado.sucursal}}</td>
+                    <td>{{ registro.empleado.codigo }}</td>
+                    <td>{{ registro.empleado.nombre }}</td>
+                    <td>{{ registro.empleado.horaentrada }} - {{ registro.empleado.horasalida }}</td>
+                    <td>{{ registro.marca_entrada }}</td>
+                    <td>{{ registro.marca_salida|default:"--" }}</td>
+                    <td>{{ registro.simbolo}}</td>
+                    <td>{{ registro.falta}}</td>
+                    <td>{{ registro.empleado.departamento}}</td>
+                </tr>
+                
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+
+{% endblock %}
