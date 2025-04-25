@@ -2,7 +2,7 @@ body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .global-container{
-   
+   max-width: 90%;
    margin: 0 auto;
    text-align: center;
    padding: 0 16px;

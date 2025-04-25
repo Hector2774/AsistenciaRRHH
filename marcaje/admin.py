@@ -1,15 +1,9 @@
 from django.contrib import admin
 from .models import *
 
-@admin.register(Sucursal)
-class SucursalAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'sucursal')
-    search_fields = ('codigo', 'sucursal')
+admin.site.register(Departamentos)
 
-@admin.register(Departamentos)
-class SucursalAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'departamento')
-    search_fields = ('codigo', 'departamento')
+admin.site.register(Sucursal)
 
 @admin.register(Empleado)
 class EmpleadoAdmin(admin.ModelAdmin):
