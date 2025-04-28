@@ -1,0 +1,64 @@
+<script>
+    function cargarEmpleadosPorSucursal(sucursalId) {
+        const url = `http://192.168.11.185:3003/planilla/webservice/empleados/?sucursal=${1}`;
+    
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'  // 👈 ¡Cabecera obligatoria!
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al consultar empleados');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            mostrarEmpleados(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+    
+    function mostrarEmpleados(empleados) {
+        const tabla = document.getElementById('tabla-empleados');
+        tabla.innerHTML = '';
+    
+        empleados.forEach(empleado => {
+            const fila = document.createElement('tr');
+            fila.innerHTML = `
+                <td>${empleado.codigo}</td>
+                <td>${empleado.nombre}</td>
+                <td>${empleado.departamento}</td>
+                <td>${empleado.sucursal}</td>
+            `;
+            tabla.appendChild(fila);
+        });
+    }
+    </script>
+    
+    
+    <select onchange="cargarEmpleadosPorSucursal(this.value)">
+        <option value="">Seleccione una sucursal</option>
+        <option value="1">Sucursal 1</option>
+        <option value="2">Sucursal 2</option>
+        <!-- Más opciones -->
+    </select>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Departamento</th>
+          <th>Sucursal</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-empleados">
+        <!-- Aquí se agregan los empleados dinámicamente -->
+      </tbody>
+    </table>
+    

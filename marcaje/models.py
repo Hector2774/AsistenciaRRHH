@@ -1,6 +1,5 @@
 from django.db import models
 
-from django.db import models
 
 class Sucursal(models.Model):
     
@@ -17,7 +16,6 @@ class Departamentos(models.Model):
         return self.departamento
 
 class Empleado(models.Model):
-    # Campo alfanumérico como especificó tu supervisor
     codigo = models.CharField(max_length=20, unique=True, primary_key=True)
     nombre = models.CharField(max_length=100)
     sucursal = models.ForeignKey(Sucursal, on_delete=models.PROTECT, null=True, blank=True)
