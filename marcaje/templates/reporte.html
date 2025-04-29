@@ -22,6 +22,7 @@
           </select>
 
         <button type="submit">Filtrar</button>
+        <button type="submit">Sincronizar Empleados</button>
     </form>
 
     <div class="table-container">
@@ -56,10 +57,27 @@
                 </tr>
                 
                 {% endfor %}
+
+                <!-- {% for e in empleados %}
+                <tr>
+                    <td></td>
+                    <td>{{e.sucursal}}</td>
+                    <td>{{e.codigo}}</td>
+                    <td>{{e.nombre}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{e.departamento}}</td>
+                </tr>
+                {% endfor %} -->
             </tbody>
         </table>
     </div>
     
 </div>
+
+<script src="{% static 'scripts/script.js' %}"></script>
 
 {% endblock %}

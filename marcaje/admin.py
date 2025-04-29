@@ -1,14 +1,11 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register(Departamentos)
-
-admin.site.register(Sucursal)
-
 @admin.register(Empleado)
 class EmpleadoAdmin(admin.ModelAdmin):
-    list_display = ('codigo', 'nombre', 'sucursal', 'departamento', 'horaentrada', 'horasalida')
+    list_display = ('codigo', 'nombre', 'sucursal', 'departamento')
     search_fields = ('codigo', 'nombre', 'sucursal', 'departamento')
+    list_filter = ('codigo', 'nombre', 'sucursal', 'departamento')
 
 @admin.register(RegistroMarcaje)
 class RegistroMarcajeAdmin(admin.ModelAdmin):

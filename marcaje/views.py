@@ -1,55 +1,79 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import RegistroMarcaje, Departamentos, Sucursal
+from .models import RegistroMarcaje, Empleado
 from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 import requests
 from django.http import JsonResponse
-
+from .sync import sincronizar_empleados
+from django.core import serializers
 
 def empleados_proxy(request):
-    sucursal_id = 1 
-
-    if not sucursal_id:
-        return JsonResponse({'error': 'No se especificó la sucursal'}, status=400)
-
-    # Construir la URL del servidor externo
-    url = f'http://192.168.11.185:3003/planilla/webservice/empleados/?sucursal={sucursal_id}'
-
+    target_url = "http://192.168.11.185:3003/planilla/webservice/empleados/"
+    
+    headers = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json',
+    }
+    
     try:
-        # Hacer la petición al servidor externo
-        response = requests.get(url, headers={'X-Requested-With': 'XMLHttpRequest'})
-        response.raise_for_status()  # Lanza error si la respuesta es 4xx o 5xx
-        data = response.json()  # Convertimos la respuesta en JSON
-    except requests.exceptions.RequestException as e:
-        # Si hubo un error al conectarse
-        return JsonResponse({'error': str(e)}, status=500)
+        response = requests.get(
+            target_url,
+            headers=headers,
+            params={'sucursal': 1},
+            timeout=10
+        )
+        response.raise_for_status()
+        return JsonResponse(response.json())
+    
+    except Exception as e:
+        return JsonResponse(
+            {'error': str(e)},
+            status=500
+        )
+# @csrf_exempt    
+def sync_empleados_view(request):
+    if request.method == 'POST':
+        resultado = sincronizar_empleados()
 
-    # Devolver la data al navegador
-    return JsonResponse(data, safe=False)
+        empleados = Empleado.objects.all()
+        empleados_json = serializers.serialize('json', empleados)
+            
+        resultado['empleados'] = empleados_json  # Agrega los datos al resultado
+        return JsonResponse(resultado)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 def marcar(request):
-    return render(request, 'empleado.html')
+    empleados = Empleado.objects.all()
+
+    context = {
+        'empleados': empleados,
+    }
+    return render(request, 'empleados.html', context)
 
 def probando(request):
     return HttpResponse("HOLA PROBANDO")
 
 def lista_registros(request):
     registros = RegistroMarcaje.objects.all()
-    sucursal = request.GET.get('sucursal')
-    departamento = request.GET.get('departamento')
+    empleados = Empleado.objects.all()
+    # sucursal = request.GET.get('sucursal')
+    # departamento = request.GET.get('departamento')
 
-    if sucursal:
-        registros = registros.filter(empleado__sucursal__id=sucursal)
-    if departamento:
-        registros = registros.filter(empleado__departamento__id=departamento)
+    # if sucursal:
+    #     registros = registros.filter(empleado__sucursal__id=sucursal)
+    # if departamento:
+    #     registros = registros.filter(empleado__departamento__id=departamento)
 
     context = {
         'registros': registros,
-        'departamentos': Departamentos.objects.all(),
-        'sucursales': Sucursal.objects.all(),
-        'departamento_seleccionado': departamento,
-        'sucursal__seleccionada': sucursal,
+        'empleados': empleados,
+        # 'departamentos': Departamentos.objects.all(),
+        # 'sucursales': Sucursal.objects.all(),
+        # 'departamento_seleccionado': departamento,
+        # 'sucursal__seleccionada': sucursal,
     }
 
     return render(request, 'reporte.html', context)
 # Create your views here.
+
