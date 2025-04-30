@@ -1,3 +1,4 @@
+{% extends 'layouts/base.html' %}
 
 {% load static %}<!-- Reusa estilos del admin -->
 
@@ -7,19 +8,19 @@
     <h1>Asistencia de Empleados PROMACO</h1>
 
     <form method="get">
-        <select name="departamento">
+        <select name="departamento" onchange="this.form.submit()">
             <option value="">Departamentos</option>
-            {% for d in departamentos %}
-            <option value="{{ d.id }}" {% if d.id|stringformat:"s" == departamento__seleccionado %}selected{% endif %}>{{ d.departamento }}</option>
+            {% for depto in departamentos %}
+            <option value="{{ depto }}" {% if depto == departamento_seleccionado %}selected{% endif %}>{{ depto }}</option>
             {% endfor %}
         </select>
 
-        <select name="sucursal">
+        <!-- <select name="sucursal">
             <option value="">Todas las sucursales</option>
             {% for s in sucursales %}
               <option value="{{ s.id }}" {% if s.id|stringformat:"s" == sucursal_seleccionada %}selected{% endif %}>{{ s.sucursal }}</option>
             {% endfor %}
-          </select>
+          </select> -->
 
         <button type="submit">Filtrar</button>
         <button type="submit">Sincronizar Empleados</button>

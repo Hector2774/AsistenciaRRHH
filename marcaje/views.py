@@ -20,7 +20,7 @@ def empleados_proxy(request):
         response = requests.get(
             target_url,
             headers=headers,
-            params={'sucursal': 1},
+            params={'sucursal': 2},
             timeout=10
         )
         response.raise_for_status()
@@ -44,10 +44,21 @@ def sync_empleados_view(request):
     return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 def marcar(request):
+    departamento = request.GET.get('departamento')
     empleados = Empleado.objects.all()
+
+    if departamento:
+        empleados = empleados.filter(departamento=departamento)
+    
+    departamentos = Empleado.objects.order_by('departamento'
+                      ).values_list('departamento', flat=True
+                      ).distinct()
 
     context = {
         'empleados': empleados,
+        'departamentos': departamentos,
+        
+        'departamento_seleccionado': departamento,
     }
     return render(request, 'empleados.html', context)
 
@@ -56,21 +67,21 @@ def probando(request):
 
 def lista_registros(request):
     registros = RegistroMarcaje.objects.all()
+    departamento = request.GET.get('departamento')
     empleados = Empleado.objects.all()
-    # sucursal = request.GET.get('sucursal')
-    # departamento = request.GET.get('departamento')
-
-    # if sucursal:
-    #     registros = registros.filter(empleado__sucursal__id=sucursal)
-    # if departamento:
-    #     registros = registros.filter(empleado__departamento__id=departamento)
+    
+   
+    if departamento:
+        registros = registros.filter(empleado__departamento=departamento)
+   
+    departamentos = RegistroMarcaje.objects.values_list('empleado__departamento', flat=True).distinct()
 
     context = {
         'registros': registros,
         'empleados': empleados,
-        # 'departamentos': Departamentos.objects.all(),
-        # 'sucursales': Sucursal.objects.all(),
-        # 'departamento_seleccionado': departamento,
+        'departamentos': departamentos,
+        
+        'departamento_seleccionado': departamento,
         # 'sucursal__seleccionada': sucursal,
     }
 

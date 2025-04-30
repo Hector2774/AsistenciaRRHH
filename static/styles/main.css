@@ -1,5 +1,7 @@
 body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 .global-container{
    max-width: 90%;
@@ -7,6 +9,7 @@ body{
    text-align: center;
    padding: 0 16px;
 }
+
 
 .tabla-asis {
     border-collapse: collapse;
@@ -38,4 +41,5 @@ body{
   .tabla-asis tbody tr:hover {
     background-color: #d1f0e1;
   }
+
   
