@@ -7,6 +7,11 @@ class EmpleadoAdmin(admin.ModelAdmin):
     search_fields = ('codigo', 'nombre', 'sucursal', 'departamento')
     list_filter = ('codigo', 'nombre', 'sucursal', 'departamento')
 
+@admin.register(Marcaje)
+class MarcajeAdmin(admin.ModelAdmin):
+    list_display = ('empleado__codigo', 'empleado', 'fecha_hora', 'empleado__sucursal', 'tipo_registro', 'empleado__departamento')
+     
+
 @admin.register(RegistroMarcaje)
 class RegistroMarcajeAdmin(admin.ModelAdmin):
     list_display = ('empleado','empleado__sucursal', 'fecha', 'marca_entrada', 'marca_salida', 'simbolo', 'falta', 'empleado__departamento')

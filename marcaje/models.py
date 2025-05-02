@@ -14,7 +14,7 @@ class Empleado(models.Model):
 
     
     def __str__(self):
-        return f"{self.codigo} - {self.nombre} "
+        return f"{self.nombre} "
 
 class RegistroMarcaje(models.Model):
     empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
@@ -27,3 +27,29 @@ class RegistroMarcaje(models.Model):
 
     def __str__(self):
         return f"{self.empleado.codigo} - {self.fecha}"
+    
+
+class Marcaje(models.Model):
+    TIPO_REGISTRO = [
+        ('I', 'Entrada'),
+        ('O', 'Salida'),
+    ]
+
+    empleado = models.ForeignKey(
+        'Empleado',
+       
+        on_delete=models.CASCADE,
+        
+        verbose_name="Empleado"
+    )
+    fecha_hora = models.DateTimeField(verbose_name="Fecha y hora de registro")
+    tipo_registro = models.CharField(
+        max_length=1,
+        choices=TIPO_REGISTRO,
+        verbose_name="Tipo de marcaje"
+    )
+
+
+
+    def __str__(self):
+        return f"{self.empleado.codigo} - {self.fecha_hora} ({self.get_tipo_registro_display()})"

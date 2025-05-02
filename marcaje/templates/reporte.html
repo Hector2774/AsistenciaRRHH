@@ -11,7 +11,9 @@
         <select name="departamento" onchange="this.form.submit()">
             <option value="">Departamentos</option>
             {% for depto in departamentos %}
-            <option value="{{ depto }}" {% if depto == departamento_seleccionado %}selected{% endif %}>{{ depto }}</option>
+            <option value="{{ depto }}" {% if depto == departamento_seleccionado %}selected{% endif %}>
+              {{ depto }}
+            </option>
             {% endfor %}
         </select>
 
@@ -22,38 +24,43 @@
             {% endfor %}
           </select> -->
 
-        <button type="submit">Filtrar</button>
-        <button type="submit">Sincronizar Empleados</button>
+          <div class="acciones">
+            <button id="sync-btn">Sincronizar Marcajes</button>
+            <span id="sync-status"></span>
+            
+      
+            <input type="date">
+
+          
+    </div>
     </form>
 
+     <!-- Contenedor para resultados -->
+     
+
     <div class="table-container">
-        <table class="tabla-asis">
+        <table class="tabla-asis" id="tabla-marcaje">
             <thead>
                 <tr>
                     <th>Fecha</th>
                     <th>Sucursal</th>
                     <th>Código Empleado</th>
                     <th>Empleado</th>
-                    <th>Horario</th>
-                    <th>Marca Entrada</th>
-                    <th>Marca Salida</th>
-                    <th>Simbolo</th>
-                    <th>Falta</th>
+                 
+                    <th>Tipo de registro</th>
                     <th>Departamento</th>
                 </tr>
             </thead>
             <tbody>
                 {% for registro in registros %}
                 <tr>
-                    <td>{{ registro.fecha }}</td>
+                    <td>{{ registro.fecha_hora }}</td>
                     <td>{{ registro.empleado.sucursal}}</td>
                     <td>{{ registro.empleado.codigo }}</td>
                     <td>{{ registro.empleado.nombre }}</td>
-                    <td>{{ registro.empleado.horaentrada }} - {{ registro.empleado.horasalida }}</td>
-                    <td>{{ registro.marca_entrada }}</td>
-                    <td>{{ registro.marca_salida|default:"--" }}</td>
-                    <td>{{ registro.simbolo}}</td>
-                    <td>{{ registro.falta}}</td>
+                    
+                  
+                    <td>{{ registro.tipo_registro}}</td>
                     <td>{{ registro.empleado.departamento}}</td>
                 </tr>
                 
@@ -79,6 +86,6 @@
     
 </div>
 
-<script src="{% static 'scripts/script.js' %}"></script>
+<script src="{% static 'scripts/sync_marc.js' %}"></script>
 
 {% endblock %}
