@@ -9,6 +9,7 @@ from .sync import sincronizar_empleados
 from .sync_marcaje import sincronizar_marcajes
 from django.core import serializers
 from django.views.decorators.http import require_POST
+from datetime import datetime, timedelta
 
 def empleados_proxy(request):
     target_url = "http://192.168.11.185:3003/planilla/webservice/empleados/"
@@ -22,7 +23,7 @@ def empleados_proxy(request):
         response = requests.get(
             target_url,
             headers=headers,
-            params={'sucursal': 2},
+            params={'sucursal': 1},
             timeout=10
         )
         response.raise_for_status()
@@ -86,15 +87,6 @@ def sync_marcaje_view(request):
             'message': str(e),
             'marcajes': []
         }, status=500)
-    # if request.method == 'POST':
-    #     resultado = sincronizar_marcajes()
-
-    #     registros = Marcaje.objects.all()
-    #     registros_json = serializers.serialize('json', registros)
-            
-    #     resultado['registros'] = registros_json  # Agrega los datos al resultado
-    #     return JsonResponse(resultado)
-    # return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 def marcar(request):
     departamento = request.GET.get('departamento')
@@ -116,7 +108,7 @@ def marcar(request):
     return render(request, 'empleados.html', context)
 
 def probando(request):
-    return HttpResponse("HOLA PROBANDO")
+    return render(request, 'validar_asistencia.html')
 
 def lista_registros(request):
     registros = Marcaje.objects.all()
@@ -142,3 +134,37 @@ def lista_registros(request):
     return render(request, 'reporte.html', context)
 # Create your views here.
 
+def validar_asistencias(request):
+    if request.method == 'GET':
+        sucursales = Sucursal.objects.all()
+        return render(request, 'validar_asistencia.html', {'sucursales': sucursales})
+    
+    # Para solicitudes AJAX
+    try:
+        data = request.POST
+        sucursal_id = data.get('sucursal')
+        fecha_str = data.get('fecha')
+        
+        fecha = datetime.strptime(fecha_str, '%Y-%m-%d').date()
+        
+        empleados = Empleado.objects.filter(sucursal_id=sucursal_id)
+        resultados = []
+        
+        for empleado in empleados:
+            tiene_asistencia = Marcaje.objects.filter(
+                empleado=empleado,
+                fecha_hora__date=fecha,
+                tipo_registro='I'
+            ).exists()
+            
+            resultados.append({
+                'codigo': empleado.codigo,
+                'nombre': empleado.nombre,
+                'asistio': tiene_asistencia,
+                'sucursal': empleado.sucursal.nombre
+            })
+        
+        return JsonResponse({'data': resultados})
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)

@@ -1,11 +1,17 @@
 from django.db import models
 
+
+class Sucursal(models.Model):
+    nombre = models.CharField(max_length=100)
+    def __str__(self):
+        return f"{self.nombre}"
+
 class Empleado(models.Model):
     id_externo = models.IntegerField(unique=True)
     codigo = models.CharField(max_length=20)
     nombre = models.CharField(max_length=100)
     departamento = models.CharField(max_length=100)
-    sucursal = models.CharField(max_length=100)
+    sucursal = models.ForeignKey(Sucursal, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = "Empleado"

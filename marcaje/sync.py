@@ -1,7 +1,7 @@
 # marcaje/sync.py
 import requests
 from django.db import transaction
-from .models import Empleado
+from .models import Empleado, Sucursal
 import logging
 
 logger = logging.getLogger(__name__)
@@ -65,13 +65,18 @@ def sincronizar_empleados():
 
             for emp in empleados_data:
                 try:
+                    sucursal = Sucursal.objects.filter(nombre=emp['sucursal']).first()
+
+                    if not sucursal:
+                        sucursal = Sucursal.objects.create(nombre=emp['sucursal'])
+
                     empleado, created = Empleado.objects.update_or_create(
                         id_externo=emp['id'],
                         defaults={
                             'codigo': emp.get('codigo', ''),
                             'nombre': emp.get('nombre', ''),
                             'departamento': emp.get('departamento', ''),
-                            'sucursal': emp.get('sucursal', ''),
+                            'sucursal': sucursal,
                            
                         }
                     )

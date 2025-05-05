@@ -6,6 +6,8 @@ urlpatterns = [
     path('/sync-empleados/', views.sync_empleados_view, name='sync_empleados'),
     path('/api/empleados/', views.empleados_proxy, name='empleados_proxy'),
     path('/registrados', views.marcar),
-    path('/sync-marcaje/', views.sync_marcaje_view, name='sync_marcaje')
+    path('/sync-marcaje/', views.sync_marcaje_view, name='sync_marcaje'),
+    path('/validar-asistencia/', views.validar_asistencias, name='validar_asistencia'),
+    # path('/validar/', views.validar_asistencias),
    
 ]

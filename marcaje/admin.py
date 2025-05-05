@@ -12,6 +12,8 @@ class MarcajeAdmin(admin.ModelAdmin):
     list_display = ('empleado__codigo', 'empleado', 'fecha_hora', 'empleado__sucursal', 'tipo_registro', 'empleado__departamento')
      
 
+admin.site.register(Sucursal)
+
 @admin.register(RegistroMarcaje)
 class RegistroMarcajeAdmin(admin.ModelAdmin):
     list_display = ('empleado','empleado__sucursal', 'fecha', 'marca_entrada', 'marca_salida', 'simbolo', 'falta', 'empleado__departamento')
