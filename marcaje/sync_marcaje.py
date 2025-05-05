@@ -4,15 +4,17 @@ from datetime import datetime
 from django.db import transaction
 from .models import Marcaje
 from .models import Empleado
+from django.utils import timezone
 
-def sincronizar_marcajes():
+def sincronizar_marcajes(fecha=None):
     """
     Flujo completo:
     1. Obtener datos de la API visible en navegador
     2. Sincronizar usando id_externo como referencia
     3. Manejar errores y registrar resultados
     """
-    API_URL = "http://192.168.11.185:3006/api/asistencias/?fecha=2025-03-01"  # Reemplaza con tu URL real
+    fecha = fecha or timezone.now().date()
+    API_URL = f"http://192.168.11.185:3006/api/asistencias/?fecha={fecha.strftime('%Y-%m-%d')}" # Reemplaza con tu URL real
     
     try:
         # 1. Obtener datos de la API

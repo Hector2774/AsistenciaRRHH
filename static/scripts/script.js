@@ -1,6 +1,7 @@
 document.getElementById('sync-btn').addEventListener('click', async function() {
     const btn = this;
     const statusEl = document.getElementById('sync-status');
+   
     const tablaEmpleados = document.getElementById('tabla-empleados');
     btn.disabled = true;
     statusEl.textContent = "Sincronizando...";
@@ -70,11 +71,10 @@ function actualizarTabla(empleados) {
     empleados.forEach(emp => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${emp.fields.sucursal}</td>
+            <td>${emp.fields.sucursal.nombre}</td>  <!-- Ahora sí mostrará el nombre -->
             <td>${emp.fields.codigo}</td>
             <td>${emp.fields.nombre}</td>
             <td>${emp.fields.departamento}</td>
-            
         `;
         tbody.appendChild(row);
     });

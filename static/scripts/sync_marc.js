@@ -1,6 +1,7 @@
 document.getElementById('sync-btn').addEventListener('click', async function() {
     const btn = this;
     const statusEl = document.getElementById('sync-status');
+    const fechaSeleccionada = document.getElementById('fecha-sync').value;
     
     // Configuración inicial
     btn.disabled = true;
@@ -11,7 +12,7 @@ document.getElementById('sync-btn').addEventListener('click', async function() {
 
     try {
         // 1. Enviar petición
-        const response = await fetch('/marcaje/sync-marcaje/', {
+        const response = await fetch(`/marcaje/sync-marcaje/?fecha=${fechaSeleccionada}`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': getCookie('csrftoken'),
