@@ -14,7 +14,9 @@ class MarcajeAdmin(admin.ModelAdmin):
 
 admin.site.register(Sucursal)
 
+
 @admin.register(MarcajeDepurado)
 class RegistroMarcajeAdmin(admin.ModelAdmin):
     list_display = ('empleado__codigo', 'empleado', 'fecha', 'empleado__sucursal', 'entrada', 'salida', 'empleado__departamento')
 
+admin.site.register(Permisos)

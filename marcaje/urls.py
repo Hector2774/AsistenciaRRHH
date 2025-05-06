@@ -8,6 +8,8 @@ urlpatterns = [
     path('/registrados', views.marcar),
     path('/sync-marcaje/', views.sync_marcaje_view, name='sync_marcaje'),
     path('/validar-asistencia/', views.validar_asistencias, name='validar_asistencia'),
+    path('/solicitud/', views.vista_solicitud),
+    path('/crear-permiso', views.crear_permiso)
     # path('/validar/', views.validar_asistencias),
    
 ]

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from django.db.models import Q
@@ -12,6 +12,7 @@ from django.views.decorators.http import require_POST
 from datetime import datetime
 from django.utils import timezone
 from .depurar_marcajes import depurar_marcajes
+from .forms import *
 
 def empleados_proxy(request):
     target_url = "http://192.168.11.185:3003/planilla/webservice/empleados/"
@@ -170,3 +171,19 @@ def validar_asistencias(request):
     
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+    
+def vista_solicitud(request):
+    return render(request, 'solicitud_permiso.html')
+
+def crear_permiso(request):
+    if request.method == 'POST':
+        form = PermisoForm(request.POST, request.FILES)
+        if form.is_valid():
+            empleadoo = Empleado.objects.filter(id = 1)
+            permiso = form.save(commit=False)
+            
+            permiso.save()
+            return redirect('lista_permisos')
+    else:
+        form = PermisoForm()
+    return render(request, 'crear_permiso.html', {'form': form})

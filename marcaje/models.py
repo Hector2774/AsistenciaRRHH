@@ -56,3 +56,22 @@ class MarcajeDepurado(models.Model):
    
     def __str__(self):
         return self.empleado.codigo
+    
+
+
+
+class Permisos(models.Model):
+
+    ESTADO_SOLICITUD = [
+        ('P', 'Pendiente'),
+        ('A', 'Aprobada'),
+        ('A', 'Rechazada'),
+    ]
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    tipo_permiso = models.CharField(max_length=100)
+    fecha_inicio = models.DateField()
+    fecha_final = models.DateField()
+    fecha_solicitud = models.DateTimeField(auto_now=True)
+    descripcion = models.CharField(max_length=300)
+    comprobante = models.FileField()
+    estado_solicitud = models.CharField(choices=ESTADO_SOLICITUD)
