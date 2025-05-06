@@ -14,9 +14,7 @@ class MarcajeAdmin(admin.ModelAdmin):
 
 admin.site.register(Sucursal)
 
-@admin.register(RegistroMarcaje)
+@admin.register(MarcajeDepurado)
 class RegistroMarcajeAdmin(admin.ModelAdmin):
-    list_display = ('empleado','empleado__sucursal', 'fecha', 'marca_entrada', 'marca_salida', 'simbolo', 'falta', 'empleado__departamento')
-    list_filter = ('fecha', 'empleado__departamento', 'empleado__sucursal')
-    search_fields = ('empleado__codigo', 'empleado__nombre')
-    date_hierarchy = 'fecha'
+    list_display = ('empleado__codigo', 'empleado', 'fecha', 'empleado__sucursal', 'entrada', 'salida', 'empleado__departamento')
+

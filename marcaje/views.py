@@ -11,6 +11,7 @@ from django.core import serializers
 from django.views.decorators.http import require_POST
 from datetime import datetime
 from django.utils import timezone
+from .depurar_marcajes import depurar_marcajes
 
 def empleados_proxy(request):
     target_url = "http://192.168.11.185:3003/planilla/webservice/empleados/"
@@ -64,6 +65,7 @@ def sync_marcaje_view(request):
                 'marcajes': []
             }, status=400)
         
+        depurar_marcajes(fecha)
         # Obtener marcajes recién sincronizados
         marcajes = Marcaje.objects.all().order_by('-fecha_hora')
         
@@ -148,25 +150,20 @@ def validar_asistencias(request):
         resultados = []
         
         for empleado in empleados:
-            tiene_asistencia = Marcaje.objects.filter(
+            marcaje_depurado = MarcajeDepurado.objects.filter(
                 empleado=empleado,
-                fecha_hora__date=fecha,
-                tipo_registro='I'
-            ).exists()
+                fecha=fecha
+            ).first()
             
             resultados.append({
+                'fecha': fecha,
                 'sucursal': empleado.sucursal.nombre,
                 'codigo': empleado.codigo,
                 'nombre': empleado.nombre,
                 'departamento': empleado.departamento,
-                'asistio': tiene_asistencia,
-                
-                # 'asistio': tiene_asistencia is not None,
-                # 'fecha_hora': tiene_asistencia.fecha_hora if tiene_asistencia else None,
-                # 'fecha_hora_formateada': {
-                # 'fecha': tiene_asistencia.fecha_hora.strftime('%y/%m/%d') if tiene_asistencia else '--',
-                # 'hora': tiene_asistencia.fecha_hora.strftime('%H:%M') if tiene_asistencia else '--',
-    # },
+                'asistio': marcaje_depurado is not None,  # True si hay registro depurado
+                'entrada': marcaje_depurado.entrada.strftime('%H:%M') if marcaje_depurado and marcaje_depurado.entrada else '--',
+                'salida': marcaje_depurado.salida.strftime('%H:%M') if marcaje_depurado and marcaje_depurado.salida else '--',
             })
         
         return JsonResponse({'data': resultados})

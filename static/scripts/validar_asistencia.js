@@ -56,13 +56,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 row.innerHTML = `
-                   
+                    <td>${empleado.fecha}</td>
                     <td>${empleado.sucursal}</td>
                     <td>${empleado.codigo}</td>
                     <td>${empleado.nombre}</td>
                     <td>${empleado.departamento}</td>
-                    
-                     <td class="text-center ${empleado.asistio ? 'bg-success' : 'bg-danger'} text-white">
+                    <td>${empleado.entrada}</td>
+                    <td>${empleado.salida}</td>
+                    <td class="text-center ${empleado.asistio ? 'bg-success' : 'bg-danger'} text-white">
                         ${empleado.asistio ? 'I' : ''}
                     </td>
                 `;

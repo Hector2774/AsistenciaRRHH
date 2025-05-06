@@ -25,7 +25,7 @@
           </select> -->
 
           <div class="acciones">
-            <input type="date" id="fecha-sync" class="form-control" value="{{ hoy|date:'Y-m-d' }}" max="{{ hoy|date:'Y-m-d' }}">
+            <input type="date" id="fecha-sync" value="{{ hoy|date:'Y-m-d' }}" max="{{ hoy|date:'Y-m-d' }}">
             <button id="sync-btn">Sincronizar Marcajes</button>
             <span id="sync-status"></span>
             

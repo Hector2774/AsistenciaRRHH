@@ -21,20 +21,7 @@ class Empleado(models.Model):
     
     def __str__(self):
         return f"{self.nombre} "
-
-class RegistroMarcaje(models.Model):
-    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    fecha = models.DateField()
-    marca_entrada = models.TimeField()
-    marca_salida = models.TimeField()
-    simbolo = models.CharField(null=True, blank=True)
-    falta = models.BooleanField(default=False)
-   
-
-    def __str__(self):
-        return f"{self.empleado.codigo} - {self.fecha}"
-    
-
+ 
 class Marcaje(models.Model):
     TIPO_REGISTRO = [
         ('I', 'Entrada'),
@@ -59,3 +46,13 @@ class Marcaje(models.Model):
 
     def __str__(self):
         return f"{self.empleado.codigo} - {self.fecha_hora} ({self.get_tipo_registro_display()})"
+
+
+class MarcajeDepurado(models.Model):
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    fecha = models.DateField()
+    entrada = models.TimeField(null=True)
+    salida = models.TimeField(null=True)
+   
+    def __str__(self):
+        return self.empleado.codigo
