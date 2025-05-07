@@ -58,14 +58,18 @@ class MarcajeDepurado(models.Model):
         return self.empleado.codigo
     
 
+class TipoPermisos(models.Model):
+    tipo = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.tipo
 
 class Permisos(models.Model):
 
     ESTADO_SOLICITUD = [
         ('P', 'Pendiente'),
         ('A', 'Aprobada'),
-        ('A', 'Rechazada'),
+        ('R', 'Rechazada'),
     ]
     empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     tipo_permiso = models.CharField(max_length=100)
@@ -74,4 +78,10 @@ class Permisos(models.Model):
     fecha_solicitud = models.DateTimeField(auto_now=True)
     descripcion = models.CharField(max_length=300)
     comprobante = models.FileField()
-    estado_solicitud = models.CharField(choices=ESTADO_SOLICITUD)
+    estado_solicitud = models.CharField(choices=ESTADO_SOLICITUD, default='P')
+
+    def __str__(self):
+        return f"{self.empleado.codigo} - {self.tipo_permiso}"
+    
+class GestionPermisoDetalle:
+    hola = models.CharField

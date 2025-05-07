@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from .models import *
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -176,14 +176,50 @@ def vista_solicitud(request):
     return render(request, 'solicitud_permiso.html')
 
 def crear_permiso(request):
+    sucursales = Sucursal.objects.all()
+    departamentos = Empleado.objects.order_by('departamento'
+                      ).values_list('departamento', flat=True
+                      ).distinct()
+
     if request.method == 'POST':
-        form = PermisoForm(request.POST, request.FILES)
-        if form.is_valid():
-            empleadoo = Empleado.objects.filter(id = 1)
-            permiso = form.save(commit=False)
-            
-            permiso.save()
-            return redirect('lista_permisos')
-    else:
-        form = PermisoForm()
-    return render(request, 'crear_permiso.html', {'form': form})
+        try:
+            empleado_id = request.POST.get('empleado')
+            tipo_permiso = request.POST.get('tipo_permiso')
+            fecha_inicio = request.POST.get('fecha_inicio')
+            fecha_final = request.POST.get('fecha_final')
+            descripcion = request.POST.get('descripcion')
+            comprobante = request.FILES.get('comprobante')
+
+            empleado = Empleado.objects.get(id=empleado_id)
+
+            Permisos.objects.create(
+                empleado=empleado,
+                tipo_permiso=tipo_permiso,
+                fecha_inicio=fecha_inicio,
+                fecha_final=fecha_final,
+                descripcion=descripcion,
+                comprobante=comprobante
+            )
+
+            return redirect('crear_permiso')  # O a una página de éxito
+
+        except Empleado.DoesNotExist:
+            return HttpResponseBadRequest("Empleado no válido")
+        except Exception as e:
+            return HttpResponseBadRequest(f"Error al guardar: {e}")
+        
+    return render(request, 'crear_permiso.html', {
+        'sucursales': sucursales,
+        'departamentos': departamentos
+    })
+
+def obtener_empleados(request):
+    sucursal_id = request.GET.get('sucursal_id')
+    departamento = request.GET.get('departamento')
+
+    empleados = Empleado.objects.filter(
+        sucursal_id=sucursal_id,
+        departamento=departamento
+    ).values('id', 'nombre')
+
+    return JsonResponse(list(empleados), safe=False)

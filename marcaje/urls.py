@@ -9,7 +9,8 @@ urlpatterns = [
     path('/sync-marcaje/', views.sync_marcaje_view, name='sync_marcaje'),
     path('/validar-asistencia/', views.validar_asistencias, name='validar_asistencia'),
     path('/solicitud/', views.vista_solicitud),
-    path('/crear-permiso', views.crear_permiso)
+    path('/crear-permiso', views.crear_permiso, name='crear_permiso'),
+    path('/obtener-empleados/', views.obtener_empleados, name='obtener_empleados'),
     # path('/validar/', views.validar_asistencias),
    
 ]

@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'inicio',
     'marcaje.apps.MarcajeConfig',
+    'dal',
+    'dal_select2',
+    'django_select2',
+
     
 ]
 

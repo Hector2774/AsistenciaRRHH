@@ -19,4 +19,6 @@ admin.site.register(Sucursal)
 class RegistroMarcajeAdmin(admin.ModelAdmin):
     list_display = ('empleado__codigo', 'empleado', 'fecha', 'empleado__sucursal', 'entrada', 'salida', 'empleado__departamento')
 
-admin.site.register(Permisos)
+@admin.register(Permisos)
+class PermisosAdmin(admin.ModelAdmin):
+     list_display = ('empleado__codigo', 'empleado', 'tipo_permiso', 'fecha_solicitud', 'fecha_inicio', 'fecha_final', 'estado_solicitud')
