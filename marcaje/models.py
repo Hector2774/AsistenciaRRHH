@@ -71,6 +71,11 @@ class Permisos(models.Model):
         ('A', 'Aprobada'),
         ('R', 'Rechazada'),
     ]
+    jefe_solicitante = models.ForeignKey(
+        Empleado,
+        on_delete=models.CASCADE,
+        related_name="solicitudes_enviadas"
+    )
     empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
     tipo_permiso = models.CharField(max_length=100)
     fecha_inicio = models.DateField()
@@ -83,5 +88,14 @@ class Permisos(models.Model):
     def __str__(self):
         return f"{self.empleado.codigo} - {self.tipo_permiso}"
     
-class GestionPermisoDetalle:
-    hola = models.CharField
+class EncargadosEmpleados:
+    jefe = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name="empleados_asignados")
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name="jefes_asignados")
+    fecha_asignacion = models.DateField(auto_now_add=True)
+
+    class Meta:
+        # Evita duplicados: un empleado no puede estar asignado dos veces al mismo jefe
+        unique_together = ("jefe", "empleado")
+
+    def __str__(self):
+        return f"{self.jefe.nombre} → {self.empleado.nombre}"
