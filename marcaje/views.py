@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
 from .models import *
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -180,6 +181,7 @@ def crear_permiso(request):
     departamentos = Empleado.objects.order_by('departamento'
                       ).values_list('departamento', flat=True
                       ).distinct()
+    tipo_permisos = TipoPermisos.objects.all()
 
     if request.method == 'POST':
         try:
@@ -191,7 +193,7 @@ def crear_permiso(request):
             comprobante = request.FILES.get('comprobante')
 
             empleado = Empleado.objects.get(id=empleado_id)
-
+            tipo_permiso = TipoPermisos.objects.get(id=tipo_permiso)
             Permisos.objects.create(
                 empleado=empleado,
                 tipo_permiso=tipo_permiso,
@@ -210,7 +212,8 @@ def crear_permiso(request):
         
     return render(request, 'crear_permiso.html', {
         'sucursales': sucursales,
-        'departamentos': departamentos
+        'departamentos': departamentos,
+        'tipo_permisos': tipo_permisos,
     })
 
 def obtener_empleados(request):
@@ -223,3 +226,38 @@ def obtener_empleados(request):
     ).values('id', 'nombre')
 
     return JsonResponse(list(empleados), safe=False)
+
+def convertir_a_encargado(request):
+    if request.method == 'POST':
+        empleado_id = request.POST.get('empleado_id')
+        empleado = get_object_or_404(Empleado, id=empleado_id)
+        empleado.es_encargado = True
+        empleado.save()
+        return redirect('crear_permiso')
+
+    # Solo muestra empleados que no son encargados
+    empleados = Empleado.objects.filter(es_encargado=False)
+    return render(request, 'lista.html', {'empleados': empleados})
+
+def asignar_empleados(request, encargado_id):
+    encargado = get_object_or_404(Empleado, id=encargado_id, es_encargado=True)
+    
+    if request.method == 'POST':
+        empleados_ids = request.POST.getlist('empleados_ids')
+        for empleado_id in empleados_ids:
+            # Crea la relación encargado-empleado
+            AsignacionEmpleadoEncargado.objects.get_or_create(
+                encargado=encargado,
+                empleado_id=empleado_id
+            )
+        return redirect('crear_permiso')
+
+    # Empleados sin encargado y que no son encargados
+    empleados_disponibles = Empleado.objects.filter(
+        es_encargado=False,
+        encargado_asignado__isnull=True
+    )
+    return render(request, 'asignar_empleados.html', {
+        'encargado': encargado,
+        'empleados': empleados_disponibles
+    })

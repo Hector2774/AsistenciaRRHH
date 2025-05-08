@@ -21,4 +21,11 @@ class RegistroMarcajeAdmin(admin.ModelAdmin):
 
 @admin.register(Permisos)
 class PermisosAdmin(admin.ModelAdmin):
-     list_display = ('empleado__codigo', 'empleado', 'tipo_permiso', 'fecha_solicitud', 'fecha_inicio', 'fecha_final', 'estado_solicitud')
+     list_display = ('encargado', 'empleado', 'tipo_permiso', 'fecha_solicitud', 'fecha_inicio', 'fecha_final', 'estado_solicitud')
+
+
+admin.site.register(TipoPermisos)
+
+@admin.register(AsignacionEmpleadoEncargado)
+class AsignacionEmpleadoEncargadoAdmin(admin.ModelAdmin):
+    list_display = ('encargado', 'empleado', 'fecha_asignacion')

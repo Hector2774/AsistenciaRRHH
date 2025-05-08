@@ -71,7 +71,7 @@ function actualizarTabla(empleados) {
     empleados.forEach(emp => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${emp.fields.sucursal.nombre}</td>  <!-- Ahora sí mostrará el nombre -->
+            <td>${emp.fields.sucursal}</td>  <!-- Ahora sí mostrará el nombre -->
             <td>${emp.fields.codigo}</td>
             <td>${emp.fields.nombre}</td>
             <td>${emp.fields.departamento}</td>

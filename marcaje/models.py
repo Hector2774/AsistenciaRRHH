@@ -12,7 +12,7 @@ class Empleado(models.Model):
     nombre = models.CharField(max_length=100)
     departamento = models.CharField(max_length=100)
     sucursal = models.ForeignKey(Sucursal, on_delete=models.PROTECT)
-
+    es_encargado = models.BooleanField(default=False)
     class Meta:
         verbose_name = "Empleado"
         verbose_name_plural = "Empleados"
@@ -71,13 +71,9 @@ class Permisos(models.Model):
         ('A', 'Aprobada'),
         ('R', 'Rechazada'),
     ]
-    jefe_solicitante = models.ForeignKey(
-        Empleado,
-        on_delete=models.CASCADE,
-        related_name="solicitudes_enviadas"
-    )
+    encargado = models.ForeignKey(Empleado, related_name="solicitudes_enviadas", on_delete=models.PROTECT)
     empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    tipo_permiso = models.CharField(max_length=100)
+    tipo_permiso = models.ForeignKey(TipoPermisos, on_delete=models.PROTECT)
     fecha_inicio = models.DateField()
     fecha_final = models.DateField()
     fecha_solicitud = models.DateTimeField(auto_now=True)
@@ -88,14 +84,20 @@ class Permisos(models.Model):
     def __str__(self):
         return f"{self.empleado.codigo} - {self.tipo_permiso}"
     
-class EncargadosEmpleados:
-    jefe = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name="empleados_asignados")
-    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name="jefes_asignados")
+class AsignacionEmpleadoEncargado(models.Model):
+    encargado = models.ForeignKey(
+        Empleado, 
+        on_delete=models.CASCADE,
+        limit_choices_to={'es_encargado': True},  # Solo permite seleccionar encargados
+        related_name="empleados_asignados"
+    )
+    empleado = models.ForeignKey(
+        Empleado,
+        on_delete=models.CASCADE,
+        unique=True,  # ¡Un empleado solo puede tener un encargado!
+        related_name="encargado_asignado"
+    )
     fecha_asignacion = models.DateField(auto_now_add=True)
 
-    class Meta:
-        # Evita duplicados: un empleado no puede estar asignado dos veces al mismo jefe
-        unique_together = ("jefe", "empleado")
-
     def __str__(self):
-        return f"{self.jefe.nombre} → {self.empleado.nombre}"
+        return f"{self.encargado.nombre} → {self.empleado.nombre}"

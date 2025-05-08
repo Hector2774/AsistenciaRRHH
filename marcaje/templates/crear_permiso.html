@@ -63,7 +63,12 @@
        
         <div class="mb-3">
           <label for="tipo_permiso" class="fw-bold">Tipo de Permiso:</label>
-        <input type="text" name="tipo_permiso" id="tipo_permiso" class="form-control" required>
+          <select id="tipo_permiso" name="tipo_permiso" class="form-select" required>
+            <option value="">seleccione</option>
+            {% for tp in tipo_permisos %}
+            <option value="{{tp.id}}">{{tp.tipo}}</option>
+            {% endfor %}
+        </select>
         </div>
         
         <div class="row mb-3">
