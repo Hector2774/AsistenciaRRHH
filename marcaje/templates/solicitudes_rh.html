@@ -1,0 +1,50 @@
+{% extends 'layouts/base.html'%}
+{% block content %}
+
+<div class="container mt5">
+
+
+<h2>Solicitudes Pendientes</h2>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <th>Encargado</th>
+                    <th>Empleado</th>
+                    <th>Tipo Permiso</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                    <th>Descripcion</th>
+                    <th>Comprobante</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </thead>
+            
+                <tbody>
+                    {%for p in permiso %}
+                    <tr>
+                        <td>{{p.encargado}}</td>
+                        <td>{{p.empleado}}</td>
+                        <td>{{p.tipo_permiso.tipo}}</td>
+                        <td>{{p.fecha_inicio}}</td>
+                        <td>{{p.fecha_final}}</td>
+                        <td>{{p.descripcion}}</td>
+                        <td>{{p.comprobante}}</td>
+                        <td>{{p.estado_solicitud}}</td>
+                        <td>
+                            <button class="bg-success">Si</button>
+                            <button class="bg-danger">X</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+
+{%endblock%}

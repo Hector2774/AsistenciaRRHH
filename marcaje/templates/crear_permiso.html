@@ -1,27 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-    <script>
-        function filtrarEmpleados() {
-            const sucursalId = document.getElementById('sucursal').value;
-            const departamento = document.getElementById('departamento').value;
-
-            if (sucursalId && departamento) {
-                fetch(`obtener-empleados/?sucursal_id=${sucursalId}&departamento=${departamento}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const empleadoSelect = document.getElementById('empleado');
-                        empleadoSelect.innerHTML = '<option value="">Seleccione un empleado</option>';
-                        data.forEach(emp => {
-                            const option = document.createElement('option');
-                            option.value = emp.id;
-                            option.textContent = emp.nombre;
-                            empleadoSelect.appendChild(option);
-                        });
-                    });
-            }
-        }
-    </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     
@@ -34,32 +14,25 @@
           <h1>Solicitar Permiso</h1>
       </div>
       <br>
-        <div class="mb-3">
-          <label for="sucursal" class="fw-bold">Sucursal:</label>
-          <select id="sucursal" class="form-select " name="sucursal" onchange="filtrarEmpleados()" required>
-              <option value="">Seleccione una sucursal</option>
-              {% for s in sucursales %}
-              <option value="{{ s.id }}">{{ s.nombre }}</option>
-              {% endfor %}
-          </select>
-        </div>
-       
-        <div class="mb-3">
-          <label for="departamento" class="fw-bold">Departamento:</label>
-          <select id="departamento" class="form-select" name="departamento" onchange="filtrarEmpleados()" required>
-              <option value="">Seleccione un departamento</option>
-              {% for d in departamentos %}
-              <option value="{{ d }}">{{ d }}</option>
-              {% endfor %}
-          </select>
-        </div>
-       
-        <div class="mb-3">
-          <label for="empleado" class="fw-bold">Empleado:</label>
-          <select id="empleado" name="empleado" class="form-select" required>
-              <option value="">Seleccione un empleado</option>
-          </select>
-        </div>
+      <div class="mb-3">
+        <label for="encargado">Encargado:</label>
+        <select id="encargado" name="encargado" class="form-select" required>
+            <option value="">Seleccione un encargado</option>
+            {% for encargado in encargados %}
+                <option value="{{ encargado.id }}">{{ encargado.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Selector de Empleado (dinámico) -->
+    <div class="mb-3">
+        <label for="empleado">Empleado:</label>
+        <select id="empleado" name="empleado" class="form-select" required disabled>
+            <option value="">Primero seleccione un encargado</option>
+        </select>
+    </div>
+
+    <!-- Resto del formulario -->
        
         <div class="mb-3">
           <label for="tipo_permiso" class="fw-bold">Tipo de Permiso:</label>
@@ -108,5 +81,35 @@
     </form>
 <br><br>
     </div>
+
+    <script>
+      $(document).ready(function() {
+          // Cuando cambia el encargado
+          $('#encargado').change(function() {
+              var encargadoId = $(this).val();
+              if (encargadoId) {
+                  // Fetch empleados del encargado via AJAX
+                  $.ajax({
+                      url: '/marcaje/encargados/',
+                      data: { 'encargado_id': encargadoId },
+                      success: function(data) {
+                          $('#empleado').empty();
+                          if (data.empleados.length > 0) {
+                              $('#empleado').append('<option value="">Seleccione un empleado</option>');
+                              $.each(data.empleados, function(key, empleado) {
+                                  $('#empleado').append('<option value="' + empleado.id + '">' + empleado.nombre + '</option>');
+                              });
+                              $('#empleado').prop('disabled', false);
+                          } else {
+                              $('#empleado').append('<option value="">No hay empleados asignados</option>');
+                          }
+                      }
+                  });
+              } else {
+                  $('#empleado').empty().prop('disabled', true);
+              }
+          });
+      });
+  </script>
 
 {% endblock %}

@@ -177,14 +177,13 @@ def vista_solicitud(request):
     return render(request, 'solicitud_permiso.html')
 
 def crear_permiso(request):
-    sucursales = Sucursal.objects.all()
-    departamentos = Empleado.objects.order_by('departamento'
-                      ).values_list('departamento', flat=True
-                      ).distinct()
+    
     tipo_permisos = TipoPermisos.objects.all()
+    encargados = Empleado.objects.filter(es_encargado=True)
 
     if request.method == 'POST':
         try:
+            encargado_id = request.POST.get('encargado')
             empleado_id = request.POST.get('empleado')
             tipo_permiso = request.POST.get('tipo_permiso')
             fecha_inicio = request.POST.get('fecha_inicio')
@@ -193,8 +192,10 @@ def crear_permiso(request):
             comprobante = request.FILES.get('comprobante')
 
             empleado = Empleado.objects.get(id=empleado_id)
+            encargado = Empleado.objects.get(id=encargado_id)
             tipo_permiso = TipoPermisos.objects.get(id=tipo_permiso)
             Permisos.objects.create(
+                encargado=encargado,
                 empleado=empleado,
                 tipo_permiso=tipo_permiso,
                 fecha_inicio=fecha_inicio,
@@ -211,9 +212,9 @@ def crear_permiso(request):
             return HttpResponseBadRequest(f"Error al guardar: {e}")
         
     return render(request, 'crear_permiso.html', {
-        'sucursales': sucursales,
-        'departamentos': departamentos,
+    
         'tipo_permisos': tipo_permisos,
+        'encargados': encargados,
     })
 
 def obtener_empleados(request):
@@ -227,6 +228,15 @@ def obtener_empleados(request):
 
     return JsonResponse(list(empleados), safe=False)
 
+def get_empleados_por_encargado(request):
+    encargado_id = request.GET.get('encargado_id')
+    if encargado_id:
+        empleados = Empleado.objects.filter(
+            encargado_asignado__encargado_id=encargado_id
+        ).values('id', 'nombre')
+        return JsonResponse({'empleados': list(empleados)})
+    return JsonResponse({'empleados': []})
+
 def convertir_a_encargado(request):
     if request.method == 'POST':
         empleado_id = request.POST.get('empleado_id')
@@ -238,6 +248,18 @@ def convertir_a_encargado(request):
     # Solo muestra empleados que no son encargados
     empleados = Empleado.objects.filter(es_encargado=False)
     return render(request, 'lista.html', {'empleados': empleados})
+
+def convertir_a_empleado(request):
+    if request.method == 'POST':
+        empleado_id = request.POST.get('empleado_id')
+        empleado = get_object_or_404(Empleado, id=empleado_id)
+        empleado.es_encargado = False
+        empleado.save()
+        return redirect('crear_permiso')
+
+    # Solo muestra empleados que no son encargados
+    empleados = Empleado.objects.filter(es_encargado=True)
+    return render(request, 'convertir_a_empleado.html', {'empleados': empleados})
 
 def asignar_empleados(request, encargado_id):
     encargado = get_object_or_404(Empleado, id=encargado_id, es_encargado=True)
@@ -261,3 +283,8 @@ def asignar_empleados(request, encargado_id):
         'encargado': encargado,
         'empleados': empleados_disponibles
     })
+
+def solicitud_rh(request):
+    permiso = Permisos.objects.all()
+
+    return render(request, 'solicitudes_rh.html', {'permiso': permiso},)
