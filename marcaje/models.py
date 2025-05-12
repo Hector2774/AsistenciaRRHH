@@ -78,7 +78,7 @@ class Permisos(models.Model):
     fecha_final = models.DateField()
     fecha_solicitud = models.DateTimeField(auto_now=True)
     descripcion = models.CharField(max_length=300)
-    comprobante = models.FileField()
+   
     estado_solicitud = models.CharField(choices=ESTADO_SOLICITUD, default='P')
 
     def __str__(self):
@@ -101,3 +101,17 @@ class AsignacionEmpleadoEncargado(models.Model):
 
     def __str__(self):
         return f"{self.encargado.nombre} → {self.empleado.nombre}"
+    
+class GestionPermisoDetalle(models.Model):
+    solicitud = models.ForeignKey(Permisos, on_delete=models.PROTECT)
+    accion_realizada = models.CharField(max_length=100)
+    revisada_por = models.CharField(max_length=100)
+    comentarios = models.CharField(max_length=300)
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.fecha}"
+    
+class PermisoComprobante(models.Model):
+    Permiso = models.ForeignKey(Permisos, on_delete=models.CASCADE)
+    comprobante = models.FileField()
