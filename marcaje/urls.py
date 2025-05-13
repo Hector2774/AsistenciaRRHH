@@ -16,6 +16,7 @@ urlpatterns = [
     path('convertir_a_empleado/', views.convertir_a_empleado, name='convertir_a_empleado'),
     path('encargados/', views.get_empleados_por_encargado),
     path('solicitud-rh/', views.solicitud_rh, name='solicitud_rh'),
+    path('subir_comprobantes/', views.subir_comprobante, name='subir_comprobantes')
     # path('/validar/', views.validar_asistencias),
    
 ]

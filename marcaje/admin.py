@@ -25,6 +25,7 @@ class PermisosAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TipoPermisos)
+admin.site.register(PermisoComprobante)
 
 @admin.register(AsignacionEmpleadoEncargado)
 class AsignacionEmpleadoEncargadoAdmin(admin.ModelAdmin):

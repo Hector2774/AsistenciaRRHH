@@ -31,3 +31,11 @@ nav{
     transition: none !important;
     color: #eee;
 }
+
+
+.img-container{
+    background: #eee;
+}
+img{
+width: 100%;
+}

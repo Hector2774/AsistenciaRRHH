@@ -17,22 +17,22 @@
                     <th>Fecha inicio</th>
                     <th>Fecha fin</th>
                     <th>Descripcion</th>
-                    
                     <th>Estado</th>
+                    <th>Comprobante</th>
                     <th>Acciones</th>
                 </thead>
             
                 <tbody>
                     {%for p in permiso %}
                     <tr>
-                        <td>{{p.encargado}}</td>
-                        <td>{{p.empleado}}</td>
-                        <td>{{p.tipo_permiso.tipo}}</td>
-                        <td>{{p.fecha_inicio}}</td>
-                        <td>{{p.fecha_final}}</td>
-                        <td>{{p.descripcion}}</td>
-                        
-                        <td>{{p.estado_solicitud}}</td>
+                        <td>{{p.Permiso.encargado}}</td>
+                        <td>{{p.Permiso.empleado}}</td>
+                        <td>{{p.Permiso.tipo_permiso.tipo}}</td>
+                        <td>{{p.Permiso.fecha_inicio}}</td>
+                        <td>{{p.Permiso.fecha_final}}</td>
+                        <td>{{p.Permiso.descripcion}}</td>
+                        <td>{{p.Permiso.estado_solicitud}}</td>
+                        <td>{{p.comprobante}}</td>
                         <td>
                             <button class="bg-success">Si</button>
                             <button class="bg-danger">X</button>

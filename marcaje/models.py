@@ -78,7 +78,7 @@ class Permisos(models.Model):
     fecha_final = models.DateField()
     fecha_solicitud = models.DateTimeField(auto_now=True)
     descripcion = models.CharField(max_length=300)
-   
+    tiene_comprobante = models.BooleanField(default=False)
     estado_solicitud = models.CharField(choices=ESTADO_SOLICITUD, default='P')
 
     def __str__(self):
@@ -115,3 +115,6 @@ class GestionPermisoDetalle(models.Model):
 class PermisoComprobante(models.Model):
     Permiso = models.ForeignKey(Permisos, on_delete=models.CASCADE)
     comprobante = models.FileField()
+
+    def __str__(self):
+        return f"{self.Permiso} - {self.comprobante}"

@@ -189,7 +189,7 @@ def crear_permiso(request):
             fecha_inicio = request.POST.get('fecha_inicio')
             fecha_final = request.POST.get('fecha_final')
             descripcion = request.POST.get('descripcion')
-            comprobante = request.FILES.get('comprobante')
+            
 
             empleado = Empleado.objects.get(id=empleado_id)
             encargado = Empleado.objects.get(id=encargado_id)
@@ -201,7 +201,7 @@ def crear_permiso(request):
                 fecha_inicio=fecha_inicio,
                 fecha_final=fecha_final,
                 descripcion=descripcion,
-                comprobante=comprobante
+                
             )
 
             return redirect('crear_permiso')  # O a una página de éxito
@@ -285,6 +285,31 @@ def asignar_empleados(request, encargado_id):
     })
 
 def solicitud_rh(request):
-    permiso = Permisos.objects.all()
+    permiso = PermisoComprobante.objects.all()
 
     return render(request, 'solicitudes_rh.html', {'permiso': permiso},)
+
+def subir_comprobante(request):
+    solicitud = Permisos.objects.filter(tiene_comprobante=False)
+    if request.method == 'POST':
+        solicitud_id = request.POST.get('solicitud_id')
+        solicitud = get_object_or_404(Permisos, id=solicitud_id)
+        form = SubirComprobanteForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            comprobante = form.save(commit=False)
+            comprobante.solicitud = solicitud
+            comprobante.save()
+
+            solicitud.tiene_comprobante = True
+            solicitud.save()
+
+            return redirect('subir_comprobantes')
+
+    else:
+        form = SubirComprobanteForm()
+
+    return render(request, 'subir_comprobantes.html', {
+        'solicitud': solicitud,
+        'form': form
+    })
