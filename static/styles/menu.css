@@ -1,0 +1,33 @@
+*{
+    font-family: "Poppins", serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+body{
+    font-size: 13px;
+}
+
+
+.side-nav{
+    background: #0F034E;
+}
+
+li{
+    color: #fff;
+}
+
+.nav-option:hover{
+    background: #fff;
+    color: black;
+    width: 100%;
+}
+
+nav{
+    padding: 0 !important; 
+}
+
+.nav-link{
+    transition: none !important;
+    color: #eee;
+}
