@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asistencia PROMACO</title>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link
     href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
@@ -17,7 +17,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/fontawesome.min.css" integrity="sha384-NvKbDTEnL+A8F/AA5Tc5kmMLSJHUO868P+lDtTpJIeQdGYaUIuLr4lVGOEA1OcMy" crossorigin="anonymous">
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-</script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.css" />
+  
+<script src="https://cdn.datatables.net/2.3.0/js/dataTables.js"></script>
+
 {% load static %}
 <link rel="stylesheet" href="{% static 'styles/menu.css' %}">
 </head>
@@ -25,7 +28,7 @@
     
     <div class="container-fluid">
         <div class="row min-vh-100">
-
+            
 {% include 'menu2.html' %}
 
 

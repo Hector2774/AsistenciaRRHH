@@ -96,3 +96,9 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+let table = $('#tabla-resultados').DataTable({
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    scrollY: 400
+  });

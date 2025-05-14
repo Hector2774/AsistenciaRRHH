@@ -1,6 +1,7 @@
 {% extends 'base.html'%}
 {% block content %}
-
+{% load static %}
+<link rel="stylesheet" href="{% static 'styles/menu.css' %}">
 <div class="container mt5">
 
 
@@ -9,7 +10,7 @@
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table">
+            <table id="permisos-pendientes" class="table styled-table table-striped table-hover">
                 <thead>
                     <th>Encargado</th>
                     <th>Empleado</th>
@@ -25,17 +26,20 @@
                 <tbody>
                     {%for p in permiso %}
                     <tr>
-                        <td>{{p.Permiso.encargado}}</td>
-                        <td>{{p.Permiso.empleado}}</td>
-                        <td>{{p.Permiso.tipo_permiso.tipo}}</td>
-                        <td>{{p.Permiso.fecha_inicio}}</td>
-                        <td>{{p.Permiso.fecha_final}}</td>
-                        <td>{{p.Permiso.descripcion}}</td>
-                        <td>{{p.Permiso.estado_solicitud}}</td>
+                        <td>{{p.permiso.encargado}}</td>
+                        <td>{{p.permiso.empleado}}</td>
+                        <td>{{p.permiso.tipo_permiso.tipo}}</td>
+                        <td>{{p.permiso.fecha_inicio}}</td>
+                        <td>{{p.permiso.fecha_final}}</td>
+                        <td>{{p.permiso.descripcion}}</td>
+                        <td>{{p.permiso.estado_solicitud}}</td>
                         <td>{{p.comprobante}}</td>
                         <td>
-                            <button class="bg-success">Si</button>
-                            <button class="bg-danger">X</button>
+                            <div class="actions d-flex align-items-center">
+                                <button class="btn btn-success btn-sm"><i class="bi bi-check-circle-fill"></i></button>
+                            <button class="btn btn-danger btn-sm"><i class="bi bi-x-square-fill"></i></button>
+                            </div>
+                            
                         </td>
                     </tr>
                     {% endfor %}
@@ -46,5 +50,11 @@
     </div>
 </div>
 </div>
-
+<script>
+    let table = $('#permisos-pendientes').DataTable({
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    scrollY: 400
+  });
+</script>
 {%endblock%}

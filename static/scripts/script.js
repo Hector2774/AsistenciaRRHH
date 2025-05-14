@@ -79,3 +79,9 @@ function actualizarTabla(empleados) {
         tbody.appendChild(row);
     });
 }
+
+let table = $('#tabla-empleados').DataTable({
+
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+  });

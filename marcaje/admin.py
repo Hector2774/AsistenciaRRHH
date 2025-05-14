@@ -25,8 +25,10 @@ class PermisosAdmin(admin.ModelAdmin):
 
 
 admin.site.register(TipoPermisos)
-admin.site.register(PermisoComprobante)
 
 @admin.register(AsignacionEmpleadoEncargado)
 class AsignacionEmpleadoEncargadoAdmin(admin.ModelAdmin):
     list_display = ('encargado', 'empleado', 'fecha_asignacion')
+
+admin.site.register(PermisoComprobante)
+

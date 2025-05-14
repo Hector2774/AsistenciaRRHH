@@ -113,8 +113,8 @@ class GestionPermisoDetalle(models.Model):
         return f"{self.fecha}"
     
 class PermisoComprobante(models.Model):
-    Permiso = models.ForeignKey(Permisos, on_delete=models.CASCADE)
+    permiso = models.ForeignKey(Permisos, on_delete=models.CASCADE)
     comprobante = models.FileField()
 
     def __str__(self):
-        return f"{self.Permiso} - {self.comprobante}"
+        return f"{self.permiso} - {self.comprobante}"

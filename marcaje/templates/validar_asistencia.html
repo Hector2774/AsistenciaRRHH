@@ -6,7 +6,7 @@
 
 
 
-<div class="container mt-4">
+<div class="container mt-2">
     <h2>Validación de Asistencias</h2>
     
     <!-- Filtros -->
@@ -15,7 +15,7 @@
             <div class="row g-3">
                 <div class="col-md-4">
                     <label for="sucursal" class="form-label">Sucursal:</label>
-                    <select id="sucursal" class="form-select">
+                    <select id="sucursal" class="form-select form-select-sm">
                         {% for sucursal in sucursales %}
                         <option value="{{ sucursal.id }}">{{ sucursal.nombre }}</option>
                         {% endfor %}
@@ -24,11 +24,11 @@
                 
                 <div class="col-md-4">
                     <label for="fecha" class="form-label">Fecha:</label>
-                    <input type="date" id="fecha" class="form-control">
+                    <input type="date" id="fecha" class="form-control form-control-sm">
                 </div>
                 
                 <div class="col-md-4 d-flex align-items-end">
-                    <button id="btn-validar" class="btn btn-primary w-100">
+                    <button id="btn-validar" class="btn btn-primary btn-sm w-100">
                         <i class="fas fa-check-circle"></i> Validar
                     </button>
                 </div>
@@ -39,7 +39,7 @@
     <!-- Resultados -->
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
+            <div class="table-responsive overflow-y-auto tabla">
                 <table id="tabla-resultados" class="table">
                     <thead>
                         <tr>

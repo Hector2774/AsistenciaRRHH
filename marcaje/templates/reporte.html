@@ -4,43 +4,38 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'styles/main.css' %}">
-<div class="global-container">
-    <h1>Asistencia de Empleados PROMACO</h1>
+
+
+<div class="card">
+    <div class="card-body">
+
+    <h2>Descargar Registros de Marcaje</h2>
 
     <form method="get">
-        <select name="departamento" onchange="this.form.submit()">
-            <option value="">Departamentos</option>
-            {% for depto in departamentos %}
-            <option value="{{ depto }}" {% if depto == departamento_seleccionado %}selected{% endif %}>
-              {{ depto }}
-            </option>
-            {% endfor %}
-        </select>
-
-        <!-- <select name="sucursal">
-            <option value="">Todas las sucursales</option>
-            {% for s in sucursales %}
-              <option value="{{ s.id }}" {% if s.id|stringformat:"s" == sucursal_seleccionada %}selected{% endif %}>{{ s.sucursal }}</option>
-            {% endfor %}
-          </select> -->
-
-          <div class="acciones">
-            <input type="date" id="fecha-sync" value="{{ hoy|date:'Y-m-d' }}" max="{{ hoy|date:'Y-m-d' }}">
-            <button id="sync-btn">Sincronizar Marcajes</button>
-            <span id="sync-status"></span>
-            
+        <div class="d-flex justify-content-center mb-3">
+            <div class="select">
+                <select class="form-select form-select-sm" name="departamento" onchange="this.form.submit()">
+                    <option value="">Departamentos</option>
+                    {% for depto in departamentos %}
+                    <option value="{{ depto }}" {% if depto == departamento_seleccionado %}selected{% endif %}>
+                      {{ depto }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="acciones mx-3">
+                <input class="form-control form-control-sm" type="date" id="fecha-sync" value="{{ hoy|date:'Y-m-d' }}" max="{{ hoy|date:'Y-m-d' }}">
+        </div>
+        <div class="boton">
+            <button class="btn btn-warning btn-sm" id="sync-btn">Sincronizar Marcajes</button>
+                <span id="sync-status"></span>
+        </div>
+        </div>
       
-            
-
-          
-    </div>
     </form>
 
-     <!-- Contenedor para resultados -->
-     
-
-    <div class="table-container">
-        <table class="tabla-asis" id="tabla-marcaje">
+    <div class="table-responsive">
+        <table class="table styled-table table-striped table-hover" id="tabla-marcaje">
             <thead>
                 <tr>
                     <th>Fecha</th>
@@ -66,26 +61,11 @@
                 </tr>
                 
                 {% endfor %}
-
-                <!-- {% for e in empleados %}
-                <tr>
-                    <td></td>
-                    <td>{{e.sucursal}}</td>
-                    <td>{{e.codigo}}</td>
-                    <td>{{e.nombre}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{{e.departamento}}</td>
-                </tr>
-                {% endfor %} -->
             </tbody>
         </table>
     </div>
-    
 </div>
+</div>    
 
 <script src="{% static 'scripts/sync_marc.js' %}"></script>
 

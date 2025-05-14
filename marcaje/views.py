@@ -290,19 +290,19 @@ def solicitud_rh(request):
     return render(request, 'solicitudes_rh.html', {'permiso': permiso},)
 
 def subir_comprobante(request):
-    solicitud = Permisos.objects.filter(tiene_comprobante=False)
+    solicitudes = Permisos.objects.filter(tiene_comprobante=False)
     if request.method == 'POST':
-        solicitud_id = request.POST.get('solicitud_id')
-        solicitud = get_object_or_404(Permisos, id=solicitud_id)
+        permiso_id = request.POST.get('permiso_id')
+        permiso = get_object_or_404(Permisos, id=permiso_id)
         form = SubirComprobanteForm(request.POST, request.FILES)
 
         if form.is_valid():
             comprobante = form.save(commit=False)
-            comprobante.solicitud = solicitud
+            comprobante.permiso = permiso
             comprobante.save()
 
-            solicitud.tiene_comprobante = True
-            solicitud.save()
+            permiso.tiene_comprobante = True
+            permiso.save()
 
             return redirect('subir_comprobantes')
 
@@ -310,6 +310,6 @@ def subir_comprobante(request):
         form = SubirComprobanteForm()
 
     return render(request, 'subir_comprobantes.html', {
-        'solicitud': solicitud,
+        'solicitudes': solicitudes,
         'form': form
     })

@@ -2,11 +2,16 @@
  {% extends 'base.html' %}
 
  {% block content %}
+ <div class="card">
+  <div class="card-body">
+
+
 <h2>Solicitudes sin comprobante</h2>
-<table class="table">
-  <thead>
+<div class="table-responsive">
+<table id="tabla-comprobantes" class="table">
+  <thead class="">
     <tr>
-      <th>Encargado</th>
+      
       <th>Empleado</th>
       <th>Fecha Incio</th>
       <th>Fecha Fin</th>
@@ -15,9 +20,9 @@
     </tr>
   </thead>
   <tbody>
-    {% for s in solicitud %}
+    {% for s in solicitudes %}
       <tr>
-        <td>{{s.encargado}}</td>
+        
         <td>{{ s.empleado }}</td>
         <td>{{ s.fecha_inicio }}</td>
         <td>{{s.fecha_final}}</td>
@@ -25,8 +30,8 @@
         <td>
           <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="hidden" name="solicitud_id" value="{{ s.id }}">
-            <input type="file" name="archivo" required>
+            <input type="hidden" name="permiso_id" value="{{ s.id }}">
+            <input type="file"  name="comprobante" required>
             <button type="submit" class="btn btn-primary btn-sm">Subir</button>
           </form>
         </td>
@@ -38,5 +43,14 @@
     {% endfor %}
   </tbody>
 </table>
-
+</div>
+</div>
+</div>
+<script>
+  let table = $('#tabla-comprobantes').DataTable({
+    pageLength: 10,
+    lengthMenu: [10, 25, 50, 100],
+    scrollY: 400
+  });
+</script>
 {%endblock%}

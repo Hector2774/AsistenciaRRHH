@@ -8,6 +8,22 @@ body{
     font-size: 13px;
 }
 
+.table th{
+    background: #0F034E !important;
+    color: #fff !important;
+    position: sticky !important;
+}
+
+.table thead{
+    position: sticky !important;
+    top: 0;
+}
+
+.holas{
+    position: sticky;
+    top: 0;
+}
+
 
 .side-nav{
     background: #0F034E;
