@@ -21,19 +21,22 @@
   </thead>
   <tbody>
     {% for s in solicitudes %}
-      <tr>
+      <tr id="permiso-{{s.id}}">
         
         <td>{{ s.empleado }}</td>
         <td>{{ s.fecha_inicio }}</td>
         <td>{{s.fecha_final}}</td>
         <td>{{ s.descripcion }}</td>
+      
         <td>
-          <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="hidden" name="permiso_id" value="{{ s.id }}">
-            <input type="file"  name="comprobante" required>
-            <button type="submit" class="btn btn-primary btn-sm">Subir</button>
-          </form>
+          <button class="btn btn-outline-primary btn-sm"
+          hx-get="{% url 'form_comprobante' s.id %}"
+          hx-target="#formulario-{{ s.id }}"
+          hx-swap="innerHTML">
+    Subir Comprobante
+          </button>
+          <div id="formulario-{{ s.id }}"></div>
+         
         </td>
       </tr>
     {% empty %}

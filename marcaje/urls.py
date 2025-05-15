@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     path('', views.lista_registros),
     path('sync-empleados/', views.sync_empleados_view, name='sync_empleados'),
@@ -16,7 +17,8 @@ urlpatterns = [
     path('convertir_a_empleado/', views.convertir_a_empleado, name='convertir_a_empleado'),
     path('encargados/', views.get_empleados_por_encargado),
     path('solicitud-rh/', views.solicitud_rh, name='solicitud_rh'),
-    path('subir_comprobantes/', views.subir_comprobante, name='subir_comprobantes')
+    path('subir_comprobantes/', views.subir_comprobante, name='subir_comprobantes'),
+    path('form-comprobantes/<int:permiso_id>/', views.formulario_comprobantes, name="form_comprobante")
     # path('/validar/', views.validar_asistencias),
    
-]
+] 

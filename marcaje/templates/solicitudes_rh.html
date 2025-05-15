@@ -33,7 +33,11 @@
                         <td>{{p.permiso.fecha_final}}</td>
                         <td>{{p.permiso.descripcion}}</td>
                         <td>{{p.permiso.estado_solicitud}}</td>
-                        <td>{{p.comprobante}}</td>
+                        <td>
+                            {% if p.comprobante %}
+                            <a href="{{p.comprobante.url}}" target="_blank">Ver comprobante</a>
+                        </td>
+                        {% endif %}
                         <td>
                             <div class="actions d-flex align-items-center">
                                 <button class="btn btn-success btn-sm"><i class="bi bi-check-circle-fill"></i></button>
@@ -52,8 +56,8 @@
 </div>
 <script>
     let table = $('#permisos-pendientes').DataTable({
-    pageLength: 10,
-    lengthMenu: [10, 25, 50, 100],
+    paging: false,
+    searching: false,
     scrollY: 400
   });
 </script>

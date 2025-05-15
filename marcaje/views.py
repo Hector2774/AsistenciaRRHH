@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 from .models import *
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 import requests
 from django.http import JsonResponse
 from .sync import sincronizar_empleados
@@ -14,7 +14,6 @@ from datetime import datetime
 from django.utils import timezone
 from .depurar_marcajes import depurar_marcajes
 from .forms import *
-
 def empleados_proxy(request):
     target_url = "http://192.168.11.185:3003/planilla/webservice/empleados/"
     
@@ -291,25 +290,26 @@ def solicitud_rh(request):
 
 def subir_comprobante(request):
     solicitudes = Permisos.objects.filter(tiene_comprobante=False)
+    return render(request, 'subir_comprobantes.html', {
+        'solicitudes': solicitudes,
+    })
+
+def formulario_comprobantes(request, permiso_id):
+    permiso = get_object_or_404(Permisos, id=permiso_id)
     if request.method == 'POST':
-        permiso_id = request.POST.get('permiso_id')
-        permiso = get_object_or_404(Permisos, id=permiso_id)
         form = SubirComprobanteForm(request.POST, request.FILES)
 
         if form.is_valid():
             comprobante = form.save(commit=False)
             comprobante.permiso = permiso
             comprobante.save()
-
             permiso.tiene_comprobante = True
             permiso.save()
-
-            return redirect('subir_comprobantes')
-
+            html = render_to_string('act_fila_comp.html', {"permiso": permiso})
+            return HttpResponse(html)
     else:
         form = SubirComprobanteForm()
+    
+    return render(request, "formulario.html", {"form": form, "permiso": permiso})
 
-    return render(request, 'subir_comprobantes.html', {
-        'solicitudes': solicitudes,
-        'form': form
-    })
+    
