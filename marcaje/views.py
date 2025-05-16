@@ -236,29 +236,37 @@ def get_empleados_por_encargado(request):
         return JsonResponse({'empleados': list(empleados)})
     return JsonResponse({'empleados': []})
 
-def convertir_a_encargado(request):
-    if request.method == 'POST':
-        empleado_id = request.POST.get('empleado_id')
-        empleado = get_object_or_404(Empleado, id=empleado_id)
-        empleado.es_encargado = True
-        empleado.save()
-        return redirect('crear_permiso')
-
-    # Solo muestra empleados que no son encargados
+def empleados_y_encargados(request):
     empleados = Empleado.objects.filter(es_encargado=False)
-    return render(request, 'lista.html', {'empleados': empleados})
+    encargados = Empleado.objects.filter(es_encargado=True)
 
-def convertir_a_empleado(request):
-    if request.method == 'POST':
-        empleado_id = request.POST.get('empleado_id')
-        empleado = get_object_or_404(Empleado, id=empleado_id)
-        empleado.es_encargado = False
-        empleado.save()
-        return redirect('crear_permiso')
+    return render(request, 'emp_enc.html', {'empleados': empleados, 'encargados': encargados})
 
-    # Solo muestra empleados que no son encargados
-    empleados = Empleado.objects.filter(es_encargado=True)
-    return render(request, 'convertir_a_empleado.html', {'empleados': empleados})
+def convertir_a_encargado(request, empleado_id):
+    empleado = get_object_or_404(Empleado, id=empleado_id)
+    empleado.es_encargado = True
+    empleado.save()
+        
+    empleados = Empleado.objects.filter(es_encargado=False)
+    encargados = Empleado.objects.filter(es_encargado=True)
+    html = render_to_string('empleados_y_encargados.html', {
+        'empleados': empleados,
+        'encargados': encargados
+    })
+    return HttpResponse(html)
+
+def convertir_a_empleado(request, empleado_id):
+    empleado = get_object_or_404(Empleado, id=empleado_id)
+    empleado.es_encargado = False
+    empleado.save()
+        
+    empleados = Empleado.objects.filter(es_encargado=False)
+    encargados = Empleado.objects.filter(es_encargado=True)
+    html = render_to_string('empleados_y_encargados.html', {
+        'empleados': empleados,
+        'encargados': encargados
+    })
+    return HttpResponse(html)
 
 def asignar_empleados(request, encargado_id):
     encargado = get_object_or_404(Empleado, id=encargado_id, es_encargado=True)
