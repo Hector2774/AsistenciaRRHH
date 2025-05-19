@@ -15,12 +15,13 @@ urlpatterns = [
     path('nomas/<int:encargado_id>/', views.asignar_empleados, name='asignar_empleados'),
     path('convertir_a_encargado/<int:empleado_id>/', views.convertir_a_encargado, name='convertir_a_encargado'),
     path('convertir_a_empleado/<int:empleado_id>/', views.convertir_a_empleado, name='convertir_a_empleado'),
-    path('encargados/', views.get_empleados_por_encargado),
+    path('encargados/<int:encargado_id>/', views.get_empleados_por_encargado, name='mostrar_empleados'),
     path('solicitud-rh/', views.solicitud_rh, name='solicitud_rh'),
     path('subir_comprobantes/', views.subir_comprobante, name='subir_comprobantes'),
     path('form-comprobantes/<int:permiso_id>/', views.formulario_comprobantes, name="form_comprobante"),
     path('empleados_y_encargados/', views.empleados_y_encargados, name='empleados_y_encargados'),
-    path('oscuros', views.modo_oscuro, name='modo_oscuro'),
+    path('ver_encargados', views.ver_encargados, name='ver_encargados'),
+    path('asignados/', views.asignar_empleados)
     # path('/validar/', views.validar_asistencias),
    
 ] 
