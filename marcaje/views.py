@@ -320,4 +320,5 @@ def formulario_comprobantes(request, permiso_id):
     
     return render(request, "formulario.html", {"form": form, "permiso": permiso})
 
-    
+def modo_oscuro(request):
+    return render(request, 'modo_oscuro.html')

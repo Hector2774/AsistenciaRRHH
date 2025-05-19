@@ -20,6 +20,7 @@ urlpatterns = [
     path('subir_comprobantes/', views.subir_comprobante, name='subir_comprobantes'),
     path('form-comprobantes/<int:permiso_id>/', views.formulario_comprobantes, name="form_comprobante"),
     path('empleados_y_encargados/', views.empleados_y_encargados, name='empleados_y_encargados'),
+    path('oscuros', views.modo_oscuro, name='modo_oscuro'),
     # path('/validar/', views.validar_asistencias),
    
 ] 

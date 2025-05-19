@@ -33,7 +33,12 @@
 
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+    <button 
+    id="modo-oscuro-toggle"
    
+>
+  Alternar modo oscuro
+</button>
     {% block content %}
     {% endblock %}
 </main>
@@ -42,6 +47,47 @@
 
 </div>
 </div>
+<style>
+    /* styles.css */
+body {
+  background: #fff;
+  color: #111;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background: #181818;
+  color: #eee;
+}
+
+/* Ejemplo para otros elementos */
+.navbar {
+  background: #f5f5f5;
+}
+body.dark-mode .navbar {
+  background: #242424;
+}
+
+</style>
+
+<!-- templates/base.html -->
+
+
+<script>
+    const toggleBtn = document.getElementById('modo-oscuro-toggle');
+    const body = document.body;
+  
+    // Cargar preferencia guardada
+    if (localStorage.getItem('dark-mode') === 'true') {
+      body.classList.add('dark-mode');
+    }
+  
+    toggleBtn.addEventListener('click', function() {
+      body.classList.toggle('dark-mode');
+      localStorage.setItem('dark-mode', body.classList.contains('dark-mode'));
+    });
+</script>
+  
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
