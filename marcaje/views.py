@@ -227,6 +227,15 @@ def obtener_empleados(request):
 
     return JsonResponse(list(empleados), safe=False)
 
+def cargar_empleados_por_encargado(request):
+    encargado_id = request.GET.get('encargado_id')
+    if encargado_id:
+        empleados = Empleado.objects.filter(
+            encargado_asignado__encargado_id=encargado_id
+        ).values('id', 'nombre')
+        return JsonResponse({'empleados': list(empleados)})
+    return JsonResponse({'empleados': []})
+
 def get_empleados_por_encargado(request, encargado_id):
     encargado = get_object_or_404(Empleado, id=encargado_id, es_encargado=True)
     asignaciones = AsignacionEmpleadoEncargado.objects.select_related('empleado', 'encargado')

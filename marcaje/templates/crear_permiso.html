@@ -86,7 +86,7 @@
               if (encargadoId) {
                   // Fetch empleados del encargado via AJAX
                   $.ajax({
-                      url: '/marcaje/encargados/',
+                      url: '/marcaje/cargar_empleados/',
                       data: { 'encargado_id': encargadoId },
                       success: function(data) {
                           $('#empleado').empty();
