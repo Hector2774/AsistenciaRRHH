@@ -227,14 +227,26 @@ def obtener_empleados(request):
 
     return JsonResponse(list(empleados), safe=False)
 
-def get_empleados_por_encargado(request):
+def get_empleados_por_encargado(request, encargado_id):
+    encargado = get_object_or_404(Empleado, id=encargado_id, es_encargado=True)
+    asignaciones = AsignacionEmpleadoEncargado.objects.select_related('empleado', 'encargado')
+    
+    asignaciones = AsignacionEmpleadoEncargado.objects.filter(encargado=encargado).select_related('empleado')
+    empleados = [a.empleado for a in asignaciones]
+
+    return render(request, 'asignados.html', {
+        'encargado': encargado,
+        'empleados': empleados
+    })
+
+def ver_empleados_asignados(request, encargado_id):
     encargado_id = request.GET.get('encargado_id')
     if encargado_id:
         empleados = Empleado.objects.filter(
             encargado_asignado__encargado_id=encargado_id
         ).values('id', 'nombre')
-        return JsonResponse({'empleados': list(empleados)})
-    return JsonResponse({'empleados': []})
+        
+    
 
 def empleados_y_encargados(request):
     empleados = Empleado.objects.filter(es_encargado=False)
@@ -268,6 +280,13 @@ def convertir_a_empleado(request, empleado_id):
     })
     return HttpResponse(html)
 
+def ver_encargados(request):
+    encargados = Empleado.objects.filter(es_encargado=True)
+
+    return render(request, 'ver_encargados.html', {'encargados': encargados})
+
+
+
 def asignar_empleados(request, encargado_id):
     encargado = get_object_or_404(Empleado, id=encargado_id, es_encargado=True)
     
@@ -279,17 +298,26 @@ def asignar_empleados(request, encargado_id):
                 encargado=encargado,
                 empleado_id=empleado_id
             )
-        return redirect('crear_permiso')
 
     # Empleados sin encargado y que no son encargados
     empleados_disponibles = Empleado.objects.filter(
         es_encargado=False,
         encargado_asignado__isnull=True
     )
-    return render(request, 'asignar_empleados.html', {
+
+    html = render_to_string('asignar_empleados.html', {
         'encargado': encargado,
         'empleados': empleados_disponibles
     })
+    return HttpResponse(html)
+    # return render(request, 'asignar:empleados.html', {
+    #     'encargado': encargado,
+    #     'empleados': empleados_disponibles
+    # } )# HttpResponse(html)
+    # return render(request, 'asignar_empleados.html', {
+    #     'encargado': encargado,
+    #     'empleados': empleados_disponibles
+    # })
 
 def solicitud_rh(request):
     permiso = PermisoComprobante.objects.all()
